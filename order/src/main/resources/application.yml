@@ -12,6 +12,8 @@ spring:
     hibernate:
       ddl-auto: update
   cloud:
+    function:
+      routing-expression: "discardFunction"  
     stream:
       kafka:
         binder:
@@ -24,5 +26,5 @@ spring:
         producer-out-0:
           destination: fastfood
           contentType: application/json
-    function:
-      routing-expression: "'discardFunction'"
+server:
+  port: 8081    
