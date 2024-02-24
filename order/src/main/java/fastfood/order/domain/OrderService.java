@@ -35,4 +35,11 @@ public class OrderService {
             // Logic to handle OrderCancelled event
         };
     }
+
+    @Bean
+    public Consumer<Object> discardFunction() {
+        return event -> {
+            // Logic to discard the event
+        };
+    }
 }

@@ -5,7 +5,6 @@ import lombok.*;
 import java.util.Date;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
 public class CookCancelled {
     private String eventType;
@@ -19,7 +18,7 @@ public class CookCancelled {
     private String status;
     private Date cookingDt;
 
-    public CookCancelled(String eventType) {
+    public CookCancelled() {
         this.eventType = this.getClass().getSimpleName();
     }       
 }

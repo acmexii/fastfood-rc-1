@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 import java.util.Date;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
 public class OrderPlaced {
     private String eventType;
@@ -18,7 +17,7 @@ public class OrderPlaced {
     private String address;
     private Date orderDt;
 
-    public OrderPlaced(String eventType) {
+    public OrderPlaced() {
         this.eventType = this.getClass().getSimpleName();
     }
 }

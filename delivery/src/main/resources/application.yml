@@ -13,7 +13,7 @@ spring:
       ddl-auto: update
   cloud:
     function:
-      routing-expression: "headers['type'].equals('CookStarted') ? 'wheneverCookStarted_PropagateDeliveryCall' : 'discardFunction'"  
+      routing-expression: "headers['type'] == 'CookStarted' ? 'wheneverCookStarted_PropagateDeliveryCall' : 'discardFunction'"
     stream:
       kafka:
         binder:

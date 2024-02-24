@@ -2,13 +2,10 @@ package fastfood.delivery.events;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import java.util.Date;
 
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
 public class FoodPickedup {
     private String eventType;
     private Long id;
@@ -20,7 +17,7 @@ public class FoodPickedup {
     private String status;
     private Date deliveryDt;
 
-    public FoodPickedup(String eventType) {
+    public FoodPickedup() {
         this.eventType = this.getClass().getSimpleName();
     }
 }

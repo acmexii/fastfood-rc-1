@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 import java.util.Date;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
 public class OrderCancelled {
     private String eventType;
@@ -18,7 +17,7 @@ public class OrderCancelled {
     private String address;
     private Date orderDt;
 
-    public OrderCancelled(String eventType) {
+    public OrderCancelled() {
         this.eventType = this.getClass().getSimpleName();
     }
 }

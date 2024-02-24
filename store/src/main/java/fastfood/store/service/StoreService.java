@@ -42,9 +42,12 @@ public class StoreService {
 
             storeRepository.save(store);
 
-            BeanUtils.copyProperties(store, OrderAccepted.class);
+            // Publish Domain Event
+            OrderAccepted orderAccepted = new OrderAccepted();
+            BeanUtils.copyProperties(store, orderAccepted);
+            
             streamBridge.send("producer-out-0", MessageBuilder
-                .withPayload(OrderAccepted.class)
+                .withPayload(orderAccepted)
                 .setHeader("type", OrderAccepted.class.getSimpleName())
                 .build()
             );
@@ -61,9 +64,12 @@ public class StoreService {
 
             storeRepository.save(store);
 
-            BeanUtils.copyProperties(store, CookCancelled.class);
+            // Publish Domain Event
+            CookCancelled cookCancelled = new CookCancelled();
+            BeanUtils.copyProperties(store, cookCancelled);
+
             streamBridge.send("producer-out-0", MessageBuilder
-                .withPayload(CookCancelled.class)
+                .withPayload(cookCancelled)
                 .setHeader("type", CookCancelled.class.getSimpleName())
                 .build()
             );
@@ -76,4 +82,5 @@ public class StoreService {
             // Logic to discard the event
         };
     }
+
 }

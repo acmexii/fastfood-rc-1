@@ -4,7 +4,6 @@ import fastfood.delivery.events.*;
 import fastfood.delivery.domain.*;
 import fastfood.delivery.repository.DeliveryRepository;
 import jakarta.transaction.Transactional;
-
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.function.StreamBridge;
@@ -12,7 +11,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
-
 import java.util.function.Consumer;
 
 @Service
@@ -27,22 +25,26 @@ public class DeliveryService {
         this.streamBridge = streamBridge;
     }    
 
+    @Bean
     public Consumer<Message<CookStarted>> wheneverCookStarted_PropagateDeliveryCall() {
         return event -> {
             // Logic to handle OrderPlaced
             CookStarted cookStarted = event.getPayload();
             Delivery delivery = new Delivery();
+            delivery.setUserId(cookStarted.getUserId());
             delivery.setOrderId(cookStarted.getOrderId());
             delivery.setStoreId(cookStarted.getId());
             delivery.setAddress(cookStarted.getAddress());
-            delivery.setUserId(cookStarted.getUserId());
             delivery.setStatus(RiderAssigned.class.getSimpleName());
 
             deliveryRepository.save(delivery);
+            
+            // Publish Domain Event
+            RiderAssigned riderAssigned = new RiderAssigned();
+            BeanUtils.copyProperties(delivery, riderAssigned);            
 
-            BeanUtils.copyProperties(delivery, RiderAssigned.class);
             streamBridge.send("producer-out-0", MessageBuilder
-                .withPayload(RiderAssigned.class)
+                .withPayload(riderAssigned)
                 .setHeader("type", RiderAssigned.class.getSimpleName())
                 .build()
             );

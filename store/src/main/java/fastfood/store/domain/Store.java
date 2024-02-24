@@ -30,19 +30,22 @@ public class Store {
     private Integer qty;
     private String address;
     private String status;
-
     @Temporal(TemporalType.TIMESTAMP)
     private Date cookingDt;
 
     @PostUpdate
     public void onPostUpdate() {
         StreamBridge streamBridge = StoreApplication.applicationContext.getBean(StreamBridge.class);
-        BeanUtils.copyProperties(this, CookStarted.class);
 
-            streamBridge.send("producer-out-0", MessageBuilder
-            .withPayload(CookStarted.class)
+        // Publish Domain Event
+        CookStarted cookStarted = new CookStarted();
+        BeanUtils.copyProperties(this, cookStarted);
+
+        streamBridge.send("producer-out-0", MessageBuilder
+            .withPayload(cookStarted)
             .setHeader("type", CookStarted.class.getSimpleName())
             .build()
          );
     }    
+
 }
