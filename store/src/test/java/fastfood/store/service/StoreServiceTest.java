@@ -5,32 +5,29 @@ import fastfood.store.events.OrderCancelled;
 import fastfood.store.events.OrderPlaced;
 import fastfood.store.repository.StoreRepository;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.ActiveProfiles;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@WebMvcTest(StoreService.class)
-@ContextConfiguration(classes = {StoreService.class})
+@SpringBootTest
+@ActiveProfiles("test")
 public class StoreServiceTest {
 
     @Autowired
-    @InjectMocks
     private StoreService storeService;
 
     @MockBean
     private StoreRepository storeRepository;
 
-    @Mock
+    @MockBean
     private StreamBridge streamBridge;
 
     @Test

@@ -8,6 +8,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CookStarted {
+    private String eventType;
     private Long id;
     private Long orderId;
     private String userId;
@@ -17,4 +18,8 @@ public class CookStarted {
     private String address;
     private String status;
     private Date cookingDt;
+
+    public CookStarted(String eventType) {
+        this.eventType = this.getClass().getSimpleName();
+    }
 }

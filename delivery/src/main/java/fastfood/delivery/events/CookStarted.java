@@ -1,4 +1,4 @@
-package fastfood.store.events;
+package fastfood.delivery.events;
 
 import lombok.*;
 
@@ -7,8 +7,7 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderAccepted {
-    private String eventType;
+public class CookStarted {
     private Long id;
     private Long orderId;
     private String userId;
@@ -18,8 +17,4 @@ public class OrderAccepted {
     private String address;
     private String status;
     private Date cookingDt;
-
-    public OrderAccepted(String eventType) {
-        this.eventType = this.getClass().getSimpleName();
-    }    
 }

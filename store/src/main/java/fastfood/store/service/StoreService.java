@@ -5,6 +5,7 @@ import fastfood.store.domain.Store;
 import fastfood.store.repository.StoreRepository;
 import jakarta.transaction.Transactional;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.context.annotation.Bean;
@@ -29,7 +30,7 @@ public class StoreService {
     @Bean
     public Consumer<Message<OrderPlaced>> wheneverOrderPlaced_AcceptOrder() {
         return event -> {
-            // Logic to handle OrderAcceptedEvent
+            // Logic to handle OrderPlaced
             OrderPlaced orderPlaced = event.getPayload();
             Store store = new Store();
             store.setUserId(orderPlaced.getUserId());
@@ -41,8 +42,9 @@ public class StoreService {
 
             storeRepository.save(store);
 
+            BeanUtils.copyProperties(store, OrderAccepted.class);
             streamBridge.send("producer-out-0", MessageBuilder
-                .withPayload(store)
+                .withPayload(OrderAccepted.class)
                 .setHeader("type", OrderAccepted.class.getSimpleName())
                 .build()
             );
@@ -54,14 +56,14 @@ public class StoreService {
         return event -> {
             // Logic to handle OrderCancelled
             OrderCancelled orderCancelled = event.getPayload();
-
             Store store = storeRepository.findByOrderId(orderCancelled.getId());            
             store.setStatus(CookCancelled.class.getSimpleName());
 
             storeRepository.save(store);
 
+            BeanUtils.copyProperties(store, CookCancelled.class);
             streamBridge.send("producer-out-0", MessageBuilder
-                .withPayload(store)
+                .withPayload(CookCancelled.class)
                 .setHeader("type", CookCancelled.class.getSimpleName())
                 .build()
             );

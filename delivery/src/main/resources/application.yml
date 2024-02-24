@@ -1,0 +1,32 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:deliverydb
+    driverClassName: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: update
+  h2:
+    console:
+      enabled: true
+  config:
+    activate:
+      on-profile: default
+
+cloud:
+  stream:
+    kafka:
+      binder:
+        brokers: localhost:9092
+    function:
+      routing-expression: headers['type'].equals('CookStarted') ? 'wheneverCookStarted_PropagateDeliveryCall' : 'discardFunction'
+    bindings:
+      functionRouter-in-0:
+        destination: fastfood
+        group: delivery
+        contentType: application/json
+      producer-out-0:
+        destination: fastfood
+        contentType: application/json
